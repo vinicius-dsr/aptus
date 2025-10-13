@@ -18,46 +18,71 @@ export interface AppealData {
 }
 
 export async function generateAppealText(data: AppealData): Promise<string> {
+  // Construir prompt com dados reais (sem placeholders)
   const prompt = `
-Você é um especialista em direito de trânsito brasileiro. Gere um recurso de multa de trânsito profissional e juridicamente fundamentado com base nos seguintes dados:
+Você é um especialista em direito de trânsito brasileiro. Gere um recurso de multa de trânsito profissional e juridicamente fundamentado.
 
-DADOS DO CONDUTOR:
-- Nome Completo: ${data.driverName || '[Nome não informado]'}
-- CPF: ${data.driverCpf || '[CPF não informado]'}
-- Endereço: ${data.driverAddress || '[Endereço não informado]'}
-- Telefone: ${data.driverPhone || '[Telefone não informado]'}
-- E-mail: ${data.driverEmail || '[E-mail não informado]'}
+DADOS FORNECIDOS (USE EXATAMENTE COMO ESTÃO):
 
-DADOS DO VEÍCULO:
-- Placa: ${data.vehiclePlate || '[Placa não informada]'}
-- RENAVAM: ${data.vehicleRenavam || '[RENAVAM não informado]'}
+CONDUTOR:
+${data.driverName ? `- Nome Completo: ${data.driverName}` : ''}
+${data.driverCpf ? `- CPF: ${data.driverCpf}` : ''}
+${data.driverAddress ? `- Endereço: ${data.driverAddress}` : ''}
+${data.driverPhone ? `- Telefone: ${data.driverPhone}` : ''}
+${data.driverEmail ? `- E-mail: ${data.driverEmail}` : ''}
 
-DADOS DA INFRAÇÃO:
-- Número do Auto: ${data.infractionNumber || '[Número não informado]'}
-- Data da Infração: ${data.infractionDate || '[Data não informada]'}
-- Código da Infração: ${data.infractionCode || '[Código não informado]'}
-- Tipo: ${data.infractionType || '[Tipo não especificado]'}
-- Órgão Autuador: ${data.agency || '[Órgão não informado]'}
+VEÍCULO:
+${data.vehiclePlate ? `- Placa: ${data.vehiclePlate}` : ''}
+${data.vehicleRenavam ? `- RENAVAM: ${data.vehicleRenavam}` : ''}
 
-INSTRUÇÕES IMPORTANTES:
-1. Use linguagem formal, técnica e respeitosa
-2. Cite artigos do Código de Trânsito Brasileiro (CTB) e Resoluções CONTRAN quando aplicável
-3. Inclua fundamentos jurídicos sólidos (due process, ampla defesa, contraditório)
-4. Organize o recurso em seções claras:
-   - Cabeçalho (destinatário: JARI do órgão autuador)
-   - Qualificação completa do recorrente
-   - Exposição dos fatos
-   - Fundamentação jurídica (Art. 280, 281 CTB, etc.)
-   - Pedidos (arquivamento, declaração de insubsistência, efeito suspensivo)
-   - Fecho com local e data
-5. Para campos não informados, use o formato "[Campo não informado]" entre colchetes
-6. Quando a data da infração não estiver informada, gere uma data contextual adequada (ex: "10/10/2025")
-7. Se necessário, gere informações contextuais adequadas sobre local e hora da infração de forma genérica
-8. Mantenha tom profissional e persuasivo
-9. Cite possíveis vícios formais no AIT (ausência de dados, inconsistências)
-10. Destaque o ônus da Administração Pública em comprovar regularidade do ato
+INFRAÇÃO:
+${data.infractionNumber ? `- Número do Auto de Infração: ${data.infractionNumber}` : ''}
+${data.infractionDate ? `- Data da Infração: ${data.infractionDate}` : ''}
+${data.infractionCode ? `- Código da Infração: ${data.infractionCode}` : ''}
+${data.agency ? `- Órgão Autuador: ${data.agency}` : ''}
 
-Gere o recurso administrativo completo e profissional agora:
+INSTRUÇÕES CRÍTICAS:
+1. USE OS DADOS FORNECIDOS ACIMA EXATAMENTE COMO APARECEM - não adicione "[Não informado]" nem outros textos
+2. Se um dado não foi fornecido acima, deixe o campo vazio no documento ou omita-o
+3. NÃO USE FORMATAÇÃO MARKDOWN (sem ###, **, *, >, etc.) - apenas texto puro formatado
+4. Estrutura do documento:
+
+   RECURSO ADMINISTRATIVO DE INFRAÇÃO DE TRÂNSITO
+   
+   ILUSTRÍSSIMO(A) SENHOR(A) PRESIDENTE DA JUNTA ADMINISTRATIVA DE RECURSOS DE INFRAÇÕES (JARI)
+   
+   RECORRENTE:
+   [Use os dados do CONDUTOR fornecidos acima]
+   
+   VEÍCULO:
+   [Use os dados do VEÍCULO fornecidos acima]
+   
+   I. EXPOSIÇÃO DOS FATOS
+   [Descrever sobre o Auto de Infração usando o número fornecido]
+   
+   II. FUNDAMENTAÇÃO JURÍDICA
+   [Citar artigos do CTB e princípios constitucionais]
+   - Art. 280 do CTB (requisitos do AIT)
+   - Art. 281 do CTB (prazos e vícios)
+   - Princípios constitucionais (ampla defesa, contraditório, due process)
+   
+   III. DOS PEDIDOS
+   Diante do exposto, requer-se:
+   a) Arquivamento do auto de infração
+   b) Declaração de insubsistência do registro
+   c) Concessão de efeito suspensivo
+   
+   [Local e data atual]
+   
+   _____________________________
+   Assinatura do Recorrente
+
+5. Tom FORMAL, TÉCNICO e RESPEITOSO
+6. Cite vícios formais possíveis (falta de dados no AIT, prazo de notificação)
+7. Mantenha estrutura profissional de petição jurídica
+8. Use APENAS texto puro - sem símbolos markdown
+
+Gere o recurso administrativo completo AGORA, usando APENAS os dados fornecidos:
 `.trim()
 
   try {

@@ -10,6 +10,41 @@ export interface PDFData {
   agency?: string
 }
 
+// Função para remover formatação markdown
+function cleanMarkdown(text: string): string {
+  return text
+    // Remover headers (###, ##, #)
+    .replace(/^#{1,6}\s+/gm, '')
+    // Remover bold/italic (**texto**, __texto__, *texto*, _texto_)
+    .replace(/\*\*\*(.+?)\*\*\*/g, '$1')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/__(.+?)__/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/_(.+?)_/g, '$1')
+    // Remover links [texto](url)
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+    // Remover imagens ![alt](url)
+    .replace(/!\[([^\]]*)\]\([^\)]+\)/g, '$1')
+    // Remover código inline `code`
+    .replace(/`([^`]+)`/g, '$1')
+    // Remover blocos de código ```
+    .replace(/```[\s\S]*?```/g, '')
+    // Remover quotes >
+    .replace(/^>\s+/gm, '')
+    // Remover listas - ou *
+    .replace(/^[-*+]\s+/gm, '')
+    // Remover listas numeradas 1. 2.
+    .replace(/^\d+\.\s+/gm, '')
+    // Remover linhas horizontais --- ou ***
+    .replace(/^([-*_]){3,}$/gm, '')
+    // Remover checkboxes [ ] [x]
+    .replace(/\[([ xX])\]/g, '')
+    // Remover múltiplas linhas vazias
+    .replace(/\n{3,}/g, '\n\n')
+    // Remover espaços extras
+    .trim()
+}
+
 export function generateAppealPDF(data: PDFData): Buffer {
   const doc = new jsPDF({
     format: 'a4',
@@ -67,8 +102,9 @@ export function generateAppealPDF(data: PDFData): Buffer {
 
   yPosition += 10
 
-  // Corpo do recurso
-  addText(data.appealText, 11)
+  // Corpo do recurso (limpar markdown)
+  const cleanedText = cleanMarkdown(data.appealText)
+  addText(cleanedText, 11)
 
   // Rodapé
   yPosition += 10

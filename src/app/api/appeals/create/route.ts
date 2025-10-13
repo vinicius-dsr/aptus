@@ -53,16 +53,26 @@ export async function POST(req: Request) {
     }
 
     // Combinar dados do usuário com dados extraídos
+    // PRIORIDADE: Dados do usuário são sempre usados
     const completeData = {
-      // Dados do usuário (prioridade - mais confiáveis)
+      // Dados extraídos dos documentos primeiro
+      ...extractedData,
+      // Dados do usuário sobrescrevem (mais confiáveis)
       driverName: user?.name || extractedData.driverName,
       driverCpf: user?.cpf || extractedData.driverCpf,
       driverPhone: user?.phone,
       driverAddress: user?.address,
       driverEmail: user?.email,
-      // Dados extraídos dos documentos
-      ...extractedData,
     }
+
+    console.log('📊 Dados combinados para o recurso:', {
+      driverName: completeData.driverName,
+      driverCpf: completeData.driverCpf,
+      driverPhone: completeData.driverPhone,
+      driverAddress: completeData.driverAddress,
+      vehiclePlate: completeData.vehiclePlate,
+      infractionNumber: completeData.infractionNumber,
+    })
 
     // Criar registro no banco (sem salvar arquivos - Vercel serverless)
     const appeal = await prisma.appeal.create({
@@ -86,7 +96,7 @@ export async function POST(req: Request) {
     })
 
     // Gerar texto do recurso com Gemini (com dados completos do usuário)
-    console.log('Gerando recurso com Gemini...')
+    console.log('🤖 Gerando recurso com Gemini usando dados:', completeData)
     const appealText = await generateAppealText(completeData)
 
     // Atualizar com o texto gerado
