@@ -35,7 +35,10 @@ export async function GET(
       agency: appeal.agency || undefined,
     })
 
-    return new NextResponse(pdfBuffer, {
+    // Converter Buffer para Uint8Array para NextResponse
+    const uint8Array = new Uint8Array(pdfBuffer)
+    
+    return new NextResponse(uint8Array, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="recurso-${appeal.infractionNumber || appeal.id}.pdf"`,
