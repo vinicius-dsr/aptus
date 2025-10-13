@@ -4,9 +4,6 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { processDocument } from '@/lib/ocr'
 import { generateAppealText, improveExtractedData } from '@/lib/openai'
-import { writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
-import { existsSync } from 'fs'
 
 export async function POST(req: Request) {
   try {
@@ -27,25 +24,10 @@ export async function POST(req: Request) {
       )
     }
 
-    // Criar diretório de uploads se não existir
-    const uploadDir = join(process.cwd(), 'public', 'uploads')
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true })
-    }
-
-    // Salvar arquivos
-    const timestamp = Date.now()
-    const cnhPath = join(uploadDir, `${timestamp}-cnh-${cnhFile.name}`)
-    const crlvPath = join(uploadDir, `${timestamp}-crlv-${crlvFile.name}`)
-    const infractionPath = join(uploadDir, `${timestamp}-infraction-${infractionFile.name}`)
-
+    // Converter arquivos para Buffer (processar em memória - Vercel serverless)
     const cnhBuffer = Buffer.from(await cnhFile.arrayBuffer())
     const crlvBuffer = Buffer.from(await crlvFile.arrayBuffer())
     const infractionBuffer = Buffer.from(await infractionFile.arrayBuffer())
-
-    await writeFile(cnhPath, cnhBuffer)
-    await writeFile(crlvPath, crlvBuffer)
-    await writeFile(infractionPath, infractionBuffer)
 
     // Processar documentos com OCR (com fallback)
     let combinedData: any = {}
@@ -84,7 +66,7 @@ export async function POST(req: Request) {
       console.warn('IA de melhoria falhou, usando dados originais')
     }
 
-    // Criar registro no banco
+    // Criar registro no banco (sem salvar arquivos - Vercel serverless)
     const appeal = await prisma.appeal.create({
       data: {
         userId: session.user.id,
@@ -96,9 +78,11 @@ export async function POST(req: Request) {
         infractionDate: improvedData.infractionDate ? new Date(improvedData.infractionDate.split('/').reverse().join('-')) : null,
         infractionCode: improvedData.infractionCode,
         agency: improvedData.agency,
-        cnhDocument: `/uploads/${timestamp}-cnh-${cnhFile.name}`,
-        crlvDocument: `/uploads/${timestamp}-crlv-${crlvFile.name}`,
-        infractionDocument: `/uploads/${timestamp}-infraction-${infractionFile.name}`,
+        // Documentos não são salvos permanentemente em serverless
+        // Para produção, use Vercel Blob Storage ou Supabase Storage
+        cnhDocument: null,
+        crlvDocument: null,
+        infractionDocument: null,
         status: 'PROCESSING',
       },
     })
