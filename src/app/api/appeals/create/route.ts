@@ -28,6 +28,18 @@ export async function POST(req: Request) {
     const crlvBuffer = Buffer.from(await crlvFile.arrayBuffer())
     const infractionBuffer = Buffer.from(await infractionFile.arrayBuffer())
 
+    // Buscar dados do usuário logado
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        name: true,
+        cpf: true,
+        phone: true,
+        address: true,
+        email: true,
+      },
+    })
+
     // ✨ Analisar documentos com Gemini Vision (substitui OCR)
     console.log('Analisando documentos com Gemini Vision...')
     let extractedData: any = {}
@@ -40,18 +52,30 @@ export async function POST(req: Request) {
       extractedData = {}
     }
 
+    // Combinar dados do usuário com dados extraídos
+    const completeData = {
+      // Dados do usuário (prioridade - mais confiáveis)
+      driverName: user?.name || extractedData.driverName,
+      driverCpf: user?.cpf || extractedData.driverCpf,
+      driverPhone: user?.phone,
+      driverAddress: user?.address,
+      driverEmail: user?.email,
+      // Dados extraídos dos documentos
+      ...extractedData,
+    }
+
     // Criar registro no banco (sem salvar arquivos - Vercel serverless)
     const appeal = await prisma.appeal.create({
       data: {
         userId: session.user.id,
-        driverName: extractedData.driverName,
-        driverCpf: extractedData.driverCpf,
-        vehiclePlate: extractedData.vehiclePlate,
-        vehicleRenavam: extractedData.vehicleRenavam,
-        infractionNumber: extractedData.infractionNumber,
-        infractionDate: extractedData.infractionDate ? new Date(extractedData.infractionDate.split('/').reverse().join('-')) : null,
-        infractionCode: extractedData.infractionCode,
-        agency: extractedData.agency,
+        driverName: completeData.driverName,
+        driverCpf: completeData.driverCpf,
+        vehiclePlate: completeData.vehiclePlate,
+        vehicleRenavam: completeData.vehicleRenavam,
+        infractionNumber: completeData.infractionNumber,
+        infractionDate: completeData.infractionDate ? new Date(completeData.infractionDate.split('/').reverse().join('-')) : null,
+        infractionCode: completeData.infractionCode,
+        agency: completeData.agency,
         // Documentos não são salvos permanentemente em serverless
         // Para produção, use Vercel Blob Storage ou Supabase Storage
         cnhDocument: null,
@@ -61,9 +85,9 @@ export async function POST(req: Request) {
       },
     })
 
-    // Gerar texto do recurso com Gemini
+    // Gerar texto do recurso com Gemini (com dados completos do usuário)
     console.log('Gerando recurso com Gemini...')
-    const appealText = await generateAppealText(extractedData)
+    const appealText = await generateAppealText(completeData)
 
     // Atualizar com o texto gerado
     await prisma.appeal.update({

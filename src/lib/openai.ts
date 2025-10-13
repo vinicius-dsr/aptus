@@ -5,6 +5,9 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY || '')
 export interface AppealData {
   driverName?: string
   driverCpf?: string
+  driverPhone?: string
+  driverAddress?: string
+  driverEmail?: string
   vehiclePlate?: string
   vehicleRenavam?: string
   infractionNumber?: string
@@ -19,29 +22,42 @@ export async function generateAppealText(data: AppealData): Promise<string> {
 Você é um especialista em direito de trânsito brasileiro. Gere um recurso de multa de trânsito profissional e juridicamente fundamentado com base nos seguintes dados:
 
 DADOS DO CONDUTOR:
-- Nome: ${data.driverName || 'Não informado'}
-- CPF: ${data.driverCpf || 'Não informado'}
+- Nome Completo: ${data.driverName || '[Nome não informado]'}
+- CPF: ${data.driverCpf || '[CPF não informado]'}
+- Endereço: ${data.driverAddress || '[Endereço não informado]'}
+- Telefone: ${data.driverPhone || '[Telefone não informado]'}
+- E-mail: ${data.driverEmail || '[E-mail não informado]'}
 
 DADOS DO VEÍCULO:
-- Placa: ${data.vehiclePlate || 'Não informado'}
-- RENAVAM: ${data.vehicleRenavam || 'Não informado'}
+- Placa: ${data.vehiclePlate || '[Placa não informada]'}
+- RENAVAM: ${data.vehicleRenavam || '[RENAVAM não informado]'}
 
 DADOS DA INFRAÇÃO:
-- Número do Auto: ${data.infractionNumber || 'Não informado'}
-- Data: ${data.infractionDate || 'Não informado'}
-- Código: ${data.infractionCode || 'Não informado'}
-- Tipo: ${data.infractionType || 'Não especificado'}
-- Órgão Emissor: ${data.agency || 'Não informado'}
+- Número do Auto: ${data.infractionNumber || '[Número não informado]'}
+- Data da Infração: ${data.infractionDate || '[Data não informada]'}
+- Código da Infração: ${data.infractionCode || '[Código não informado]'}
+- Tipo: ${data.infractionType || '[Tipo não especificado]'}
+- Órgão Autuador: ${data.agency || '[Órgão não informado]'}
 
-IMPORTANTE:
-- Use linguagem formal e técnica
-- Cite artigos do Código de Trânsito Brasileiro (CTB) quando aplicável
-- Inclua fundamentos jurídicos sólidos
-- Mantenha tom respeitoso e profissional
-- Organize em: cabeçalho, qualificação, exposição dos fatos, fundamentação jurídica, pedido e fecho
-- Não invente dados que não foram fornecidos
+INSTRUÇÕES IMPORTANTES:
+1. Use linguagem formal, técnica e respeitosa
+2. Cite artigos do Código de Trânsito Brasileiro (CTB) e Resoluções CONTRAN quando aplicável
+3. Inclua fundamentos jurídicos sólidos (due process, ampla defesa, contraditório)
+4. Organize o recurso em seções claras:
+   - Cabeçalho (destinatário: JARI do órgão autuador)
+   - Qualificação completa do recorrente
+   - Exposição dos fatos
+   - Fundamentação jurídica (Art. 280, 281 CTB, etc.)
+   - Pedidos (arquivamento, declaração de insubsistência, efeito suspensivo)
+   - Fecho com local e data
+5. Para campos não informados, use o formato "[Campo não informado]" entre colchetes
+6. Quando a data da infração não estiver informada, gere uma data contextual adequada (ex: "10/10/2025")
+7. Se necessário, gere informações contextuais adequadas sobre local e hora da infração de forma genérica
+8. Mantenha tom profissional e persuasivo
+9. Cite possíveis vícios formais no AIT (ausência de dados, inconsistências)
+10. Destaque o ônus da Administração Pública em comprovar regularidade do ato
 
-Gere o recurso completo agora:
+Gere o recurso administrativo completo e profissional agora:
 `.trim()
 
   try {

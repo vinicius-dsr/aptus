@@ -43,6 +43,7 @@ model User {
   password      String?
   cpf           String?        @unique
   phone         String?
+  address       String?
   image         String?
   role          UserRole       @default(USER)
   isActive      Boolean        @default(true)
