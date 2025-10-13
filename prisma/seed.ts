@@ -1,0 +1,174 @@
+import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
+
+const prisma = new PrismaClient()
+
+async function main() {
+  console.log('🌱 Iniciando seed do banco de dados...')
+
+  // 1. Criar planos
+  console.log('\n📊 Criando planos de assinatura...')
+  
+  const plans = [
+    {
+      name: 'free',
+      displayName: 'Gratuito',
+      description: 'Ideal para testar o serviço',
+      price: 0,
+      appealsPerMonth: 2,
+      features: [
+        '2 recursos por mês',
+        'Suporte por email',
+        'Geração com IA',
+        'Download em PDF'
+      ],
+      order: 1
+    },
+    {
+      name: 'basic',
+      displayName: 'Básico',
+      description: 'Para uso pessoal',
+      price: 29.90,
+      appealsPerMonth: 10,
+      features: [
+        '10 recursos por mês',
+        'Suporte prioritário',
+        'Geração com IA avançada',
+        'Download em PDF',
+        'Envio automático por email',
+        'Histórico completo'
+      ],
+      order: 2
+    },
+    {
+      name: 'pro',
+      displayName: 'Profissional',
+      description: 'Para profissionais e escritórios',
+      price: 79.90,
+      appealsPerMonth: 50,
+      features: [
+        '50 recursos por mês',
+        'Suporte prioritário 24/7',
+        'IA avançada com contexto',
+        'Download em PDF',
+        'Envio automático',
+        'Histórico ilimitado',
+        'Templates personalizados',
+        'Múltiplos usuários'
+      ],
+      order: 3
+    },
+    {
+      name: 'enterprise',
+      displayName: 'Empresarial',
+      description: 'Para grandes escritórios',
+      price: 199.90,
+      appealsPerMonth: 999,
+      features: [
+        'Recursos ilimitados',
+        'Suporte dedicado',
+        'IA customizada',
+        'API de integração',
+        'White label',
+        'Relatórios avançados',
+        'Gestão de equipe',
+        'SLA garantido'
+      ],
+      order: 4
+    }
+  ]
+
+  for (const planData of plans) {
+    const existingPlan = await prisma.plan.findUnique({
+      where: { name: planData.name }
+    })
+
+    if (existingPlan) {
+      console.log(`   ⏭️  Plano ${planData.displayName} já existe`)
+    } else {
+      await prisma.plan.create({ data: planData })
+      console.log(`   ✅ Plano ${planData.displayName} criado`)
+    }
+  }
+
+  // 2. Criar usuário admin
+  console.log('\n👤 Criando usuário administrador...')
+  
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@aptus.com'
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
+
+  const existingAdmin = await prisma.user.findUnique({
+    where: { email: adminEmail },
+  })
+
+  if (existingAdmin) {
+    console.log(`   ✅ Admin já existe: ${adminEmail}`)
+  } else {
+    const hashedPassword = await bcrypt.hash(adminPassword, 10)
+
+    const admin = await prisma.user.create({
+      data: {
+        name: 'Administrador',
+        email: adminEmail,
+        password: hashedPassword,
+        role: 'ADMIN',
+      },
+    })
+
+    console.log(`   ✅ Admin criado com sucesso!`)
+    console.log(`   📧 Email: ${admin.email}`)
+    console.log(`   🔑 Senha: ${adminPassword}`)
+    console.log(`   ⚠️  ALTERE A SENHA APÓS O PRIMEIRO LOGIN!`)
+  }
+
+  // 3. Criar usuário demo (opcional)
+  console.log('\n🎭 Criando usuário demo...')
+  
+  const demoEmail = 'demo@aptus.com'
+  const existingDemo = await prisma.user.findUnique({
+    where: { email: demoEmail }
+  })
+
+  if (!existingDemo) {
+    const hashedPassword = await bcrypt.hash('demo123', 10)
+    const freePlan = await prisma.plan.findUnique({ where: { name: 'free' } })
+
+    if (freePlan) {
+      const demoUser = await prisma.user.create({
+        data: {
+          name: 'Usuário Demo',
+          email: demoEmail,
+          password: hashedPassword,
+          role: 'USER',
+          subscription: {
+            create: {
+              planId: freePlan.id,
+              appealsLimit: freePlan.appealsPerMonth,
+              appealsUsed: 0,
+              currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 dias
+              status: 'ACTIVE'
+            }
+          }
+        }
+      })
+      console.log(`   ✅ Usuário demo criado: ${demoEmail} / demo123`)
+    }
+  } else {
+    console.log(`   ⏭️  Usuário demo já existe`)
+  }
+
+  console.log('\n🎉 Seed concluído com sucesso!')
+  console.log('\n📋 Resumo:')
+  console.log('   ✅ 4 planos criados')
+  console.log('   ✅ Admin criado')
+  console.log('   ✅ Usuário demo criado')
+}
+
+main()
+  .catch((e) => {
+    console.error('❌ Erro no seed:', e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
