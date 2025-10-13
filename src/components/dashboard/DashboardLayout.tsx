@@ -45,8 +45,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </Link>
               )}
               <div className="flex items-center space-x-2 pl-4 border-l">
-                <User className="h-4 w-4 text-gray-600" />
-                <span className="text-sm text-gray-600">{session?.user?.name}</span>
+                <Link href="/dashboard/profile">
+                  <Button variant="ghost" size="sm">
+                    <User className="h-4 w-4 mr-2" />
+                    {session?.user?.name}
+                  </Button>
+                </Link>
                 <Button
                   variant="ghost"
                   size="sm"
