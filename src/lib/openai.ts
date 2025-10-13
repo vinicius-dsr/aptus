@@ -106,3 +106,110 @@ Retorne SOMENTE o JSON, sem explicações adicionais.
     return currentData
   }
 }
+
+// ✨ NOVA FUNÇÃO: Analisar imagem com Gemini Vision
+export async function analyzeDocumentImage(
+  imageBuffer: Buffer,
+  documentType: 'cnh' | 'crlv' | 'infraction'
+): Promise<AppealData> {
+  const documentDescriptions = {
+    cnh: 'CNH (Carteira Nacional de Habilitação) brasileira',
+    crlv: 'CRLV (Certificado de Registro e Licenciamento de Veículo) brasileiro',
+    infraction: 'Auto de Infração de Trânsito (multa) brasileiro'
+  }
+
+  const prompt = `
+Analise esta imagem de ${documentDescriptions[documentType]} e extraia TODOS os dados possíveis.
+
+IMPORTANTE:
+- Extraia dados com precisão máxima
+- Se não conseguir ler algum campo, não invente
+- Retorne APENAS um JSON válido, sem explicações
+
+Formato de resposta (JSON):
+{
+  "driverName": "nome completo do condutor",
+  "driverCpf": "CPF formato 000.000.000-00",
+  "vehiclePlate": "placa formato ABC-1234 ou ABC1D34",
+  "vehicleRenavam": "número RENAVAM (11 dígitos)",
+  "infractionNumber": "número do auto de infração",
+  "infractionDate": "data formato DD/MM/AAAA",
+  "infractionCode": "código da infração",
+  "agency": "órgão autuador (DETRAN, PRF, etc)"
+}
+
+Retorne SOMENTE o JSON com os dados que você conseguir extrair da imagem.
+`.trim()
+
+  try {
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+    
+    // Converter buffer para base64
+    const base64Image = imageBuffer.toString('base64')
+    
+    // Detectar tipo MIME (simplificado - assumir JPEG por padrão)
+    const mimeType = 'image/jpeg'
+    
+    const result = await model.generateContent([
+      prompt,
+      {
+        inlineData: {
+          data: base64Image,
+          mimeType: mimeType
+        }
+      }
+    ])
+    
+    const response = await result.response
+    const text = response.text()
+    
+    console.log(`Gemini Vision response for ${documentType}:`, text.substring(0, 200))
+    
+    // Extrair JSON do texto
+    const jsonMatch = text.match(/\{[\s\S]*\}/)
+    if (!jsonMatch) {
+      console.warn('No JSON found in Gemini response')
+      return {}
+    }
+    
+    const jsonText = jsonMatch[0]
+    const extractedData = JSON.parse(jsonText)
+    
+    return extractedData
+  } catch (error) {
+    console.error(`Gemini Vision Error (${documentType}):`, error)
+    return {}
+  }
+}
+
+// ✨ Processar múltiplos documentos com Gemini Vision
+export async function analyzeAllDocuments(
+  cnhBuffer: Buffer,
+  crlvBuffer: Buffer,
+  infractionBuffer: Buffer
+): Promise<AppealData> {
+  console.log('Analisando documentos com Gemini Vision...')
+  
+  try {
+    // Analisar cada documento em paralelo
+    const [cnhData, crlvData, infractionData] = await Promise.all([
+      analyzeDocumentImage(cnhBuffer, 'cnh'),
+      analyzeDocumentImage(crlvBuffer, 'crlv'),
+      analyzeDocumentImage(infractionBuffer, 'infraction'),
+    ])
+    
+    // Combinar dados (prioridade: infraction > crlv > cnh)
+    const combinedData: AppealData = {
+      ...cnhData,
+      ...crlvData,
+      ...infractionData,
+    }
+    
+    console.log('Dados extraídos com sucesso:', JSON.stringify(combinedData, null, 2))
+    
+    return combinedData
+  } catch (error) {
+    console.error('Error analyzing documents:', error)
+    throw error
+  }
+}

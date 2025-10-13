@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { processDocument } from '@/lib/ocr'
-import { generateAppealText, improveExtractedData } from '@/lib/openai'
+import { analyzeAllDocuments, generateAppealText } from '@/lib/openai'
 
 export async function POST(req: Request) {
   try {
@@ -29,55 +28,30 @@ export async function POST(req: Request) {
     const crlvBuffer = Buffer.from(await crlvFile.arrayBuffer())
     const infractionBuffer = Buffer.from(await infractionFile.arrayBuffer())
 
-    // Processar documentos com OCR (com fallback)
-    let combinedData: any = {}
+    // ✨ Analisar documentos com Gemini Vision (substitui OCR)
+    console.log('Analisando documentos com Gemini Vision...')
+    let extractedData: any = {}
     
     try {
-      console.log('Processando CNH...')
-      const cnhData = await processDocument(cnhBuffer, 'cnh')
-      
-      console.log('Processando CRLV...')
-      const crlvData = await processDocument(crlvBuffer, 'crlv')
-      
-      console.log('Processando Auto de Infração...')
-      const infractionData = await processDocument(infractionBuffer, 'infraction')
-
-      // Combinar dados extraídos
-      combinedData = {
-        ...cnhData,
-        ...crlvData,
-        ...infractionData,
-      }
-      
-      console.log('OCR concluído com sucesso')
-    } catch (ocrError) {
-      console.warn('OCR falhou, usando dados vazios:', ocrError)
-      // Se OCR falhar, continuar com dados vazios
-      // O usuário pode preencher manualmente depois
-      combinedData = {}
-    }
-
-    // Melhorar dados com IA (opcional, mas ajuda)
-    let improvedData = combinedData
-    try {
-      const fullOcrText = JSON.stringify(combinedData)
-      improvedData = await improveExtractedData(fullOcrText, combinedData)
-    } catch (aiError) {
-      console.warn('IA de melhoria falhou, usando dados originais')
+      extractedData = await analyzeAllDocuments(cnhBuffer, crlvBuffer, infractionBuffer)
+      console.log('Gemini Vision concluído com sucesso!')
+    } catch (visionError) {
+      console.warn('Gemini Vision falhou, usando dados vazios:', visionError)
+      extractedData = {}
     }
 
     // Criar registro no banco (sem salvar arquivos - Vercel serverless)
     const appeal = await prisma.appeal.create({
       data: {
         userId: session.user.id,
-        driverName: improvedData.driverName,
-        driverCpf: improvedData.driverCpf,
-        vehiclePlate: improvedData.vehiclePlate,
-        vehicleRenavam: improvedData.vehicleRenavam,
-        infractionNumber: improvedData.infractionNumber,
-        infractionDate: improvedData.infractionDate ? new Date(improvedData.infractionDate.split('/').reverse().join('-')) : null,
-        infractionCode: improvedData.infractionCode,
-        agency: improvedData.agency,
+        driverName: extractedData.driverName,
+        driverCpf: extractedData.driverCpf,
+        vehiclePlate: extractedData.vehiclePlate,
+        vehicleRenavam: extractedData.vehicleRenavam,
+        infractionNumber: extractedData.infractionNumber,
+        infractionDate: extractedData.infractionDate ? new Date(extractedData.infractionDate.split('/').reverse().join('-')) : null,
+        infractionCode: extractedData.infractionCode,
+        agency: extractedData.agency,
         // Documentos não são salvos permanentemente em serverless
         // Para produção, use Vercel Blob Storage ou Supabase Storage
         cnhDocument: null,
@@ -87,9 +61,9 @@ export async function POST(req: Request) {
       },
     })
 
-    // Gerar texto do recurso com GPT-4
-    console.log('Gerando recurso com IA...')
-    const appealText = await generateAppealText(improvedData)
+    // Gerar texto do recurso com Gemini
+    console.log('Gerando recurso com Gemini...')
+    const appealText = await generateAppealText(extractedData)
 
     // Atualizar com o texto gerado
     await prisma.appeal.update({
@@ -102,7 +76,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       appealId: appeal.id,
-      extractedData: improvedData,
+      extractedData: extractedData,
     })
   } catch (error: any) {
     console.error('Appeal Creation Error:', error)
