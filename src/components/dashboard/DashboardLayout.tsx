@@ -37,7 +37,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:w-64 lg:block">
-        <div className="flex flex-col h-full bg-white shadow-lg">
+        <div className="flex flex-col h-full bg-white shadow-lg border-r">
           <SidebarContent navigation={navigation} session={session} />
         </div>
       </div>
@@ -63,7 +63,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </div>
 
-        <main className="px-4 py-6 lg:px-8">
+        <main className="px-4 py-6 lg:px-8 lg:py-8">
           {children}
         </main>
       </div>
@@ -92,51 +92,49 @@ function SidebarContent({ navigation, session, onClose }: SidebarContentProps) {
         )}
       </div>
 
-      <nav className="flex-1 px-4 py-6 space-y-2">
-        {navigation.map((item) => {
-          const Icon = item.icon
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              onClick={onClose}
-              className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900"
-            >
-              <Icon className="h-5 w-5 mr-3" />
-              {item.name}
-            </Link>
-          )
-        })}
+      <nav className="flex-1 px-4 py-6">
+        <ul className="space-y-2">
+          {navigation.map((item) => {
+            const Icon = item.icon
+            return (
+              <li key={item.name}>
+                <Link
+                  href={item.href}
+                  onClick={onClose}
+                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                >
+                  <Icon className="h-5 w-5 mr-3" />
+                  {item.name}
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
       </nav>
 
       <div className="border-t p-4">
         <div className="flex items-center space-x-3 mb-4">
-          <div className="flex-shrink-0">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-              <User className="h-4 w-4 text-white" />
-            </div>
+          <div className="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+            <User className="h-4 w-4 text-white" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">
               {session?.user?.name}
             </p>
-            <p className="text-xs text-gray-500 truncate">
-              {session?.user?.email}
-            </p>
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1">
           <Link href="/dashboard/profile" onClick={onClose}>
-            <Button variant="ghost" size="sm" className="w-full justify-start">
+            <Button variant="ghost" size="sm" className="w-full justify-start text-sm">
               <User className="h-4 w-4 mr-2" />
-              Meu Perfil
+              Perfil
             </Button>
           </Link>
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start"
+            className="w-full justify-start text-sm"
             onClick={() => signOut({ callbackUrl: '/' })}
           >
             <LogOut className="h-4 w-4 mr-2" />

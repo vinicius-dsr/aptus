@@ -102,15 +102,11 @@ export default function AppealForm() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-blue-600" />
-            Informações Iniciais
+            Você possui CNH válida?
           </CardTitle>
-          <CardDescription>
-            Responda a pergunta abaixo para personalizar seu processo de recurso
-          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Você possui CNH válida?</h3>
             <div className="flex gap-4">
               <Button
                 type="button"
@@ -134,8 +130,8 @@ export default function AppealForm() {
             {possuiCnh === false && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-800">
-                  <strong>ℹ️ Sem CNH?</strong> Mesmo assim você pode recorrer! 
-                  Envie apenas o CRLV do veículo e seu RG/CPF. Geraremos uma defesa prévia ou recurso adequado à sua situação.
+                  <strong>Sem CNH?</strong> Podemos gerar seu recurso mesmo assim.
+                  Basta enviar CRLV, RG/CPF e o auto de infração.
                 </p>
               </div>
             )}
@@ -148,11 +144,8 @@ export default function AppealForm() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-blue-600" />
-              Upload de Documentos
+              Documentos Necessários
             </CardTitle>
-            <CardDescription>
-              ✨ <strong>Novidade:</strong> IA Gemini analisa suas imagens automaticamente e extrai todos os dados!
-            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {possuiCnh ? (
@@ -163,14 +156,14 @@ export default function AppealForm() {
                   onChange={(file) => handleFileChange('cnh', file)}
                   file={files.cnh}
                 />
-                
+
                 <FileUpload
                   label="CRLV (Documento do Veículo)"
                   accept="image/*,.pdf"
                   onChange={(file) => handleFileChange('crlv', file)}
                   file={files.crlv}
                 />
-                
+
                 <FileUpload
                   label="Auto de Infração (Multa Recebida)"
                   accept="image/*,.pdf"
@@ -186,14 +179,14 @@ export default function AppealForm() {
                   onChange={(file) => handleFileChange('crlv', file)}
                   file={files.crlv}
                 />
-                
+
                 <FileUpload
                   label="RG/CPF (Documento Pessoal)"
                   accept="image/*,.pdf"
                   onChange={(file) => handleFileChange('rg', file)}
                   file={files.rg}
                 />
-                
+
                 <FileUpload
                   label="Auto de Infração (Multa Recebida)"
                   accept="image/*,.pdf"
@@ -202,13 +195,6 @@ export default function AppealForm() {
                 />
               </>
             )}
-
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-800">
-                <strong>🤖 Como funciona:</strong> Após o upload, o Gemini Vision irá analisar seus documentos, 
-                extrair automaticamente os dados e gerar um recurso jurídico completo em segundos!
-              </p>
-            </div>
           </CardContent>
         </Card>
       )}
@@ -217,18 +203,18 @@ export default function AppealForm() {
         <Button
           size="lg"
           onClick={handleSubmit}
-          disabled={possuiCnh === null || isProcessing || 
+          disabled={possuiCnh === null || isProcessing ||
             (possuiCnh ? (!files.cnh || !files.crlv || !files.infraction) : (!files.crlv || !files.rg || !files.infraction))}
         >
           {isProcessing ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              IA analisando documentos...
+              Gerando recurso...
             </>
           ) : (
             <>
               <Sparkles className="mr-2 h-4 w-4" />
-              Analisar com IA
+              Gerar Recurso
             </>
           )}
         </Button>

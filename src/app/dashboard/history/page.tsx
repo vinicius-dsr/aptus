@@ -71,46 +71,57 @@ export default function HistoryPage() {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Histórico de Recursos</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Meus Recursos</h1>
           <p className="text-gray-600 mt-2">
-            Visualize todos os recursos criados
+            Histórico de todos os recursos gerados
           </p>
         </div>
 
         {appeals.length === 0 ? (
           <Card>
-            <CardContent className="py-20 text-center">
-              <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">Nenhum recurso criado ainda</p>
+            <CardContent className="py-16 text-center">
+              <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum recurso ainda</h3>
+              <p className="text-gray-600 mb-6">Você ainda não criou nenhum recurso</p>
               <Link href="/dashboard">
-                <Button className="mt-4">Criar Primeiro Recurso</Button>
+                <Button>Criar Primeiro Recurso</Button>
               </Link>
             </CardContent>
           </Card>
         ) : (
           <div className="grid gap-4">
             {appeals.map((appeal) => (
-              <Card key={appeal.id}>
-                <CardHeader>
+              <Card key={appeal.id} className="hover:shadow-md transition-shadow">
+                <CardContent className="p-6">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle>
-                        Auto de Infração: {appeal.infractionNumber || 'N/A'}
-                      </CardTitle>
-                      <CardDescription>
-                        Placa: {appeal.vehiclePlate || 'N/A'} • 
-                        Criado em {new Date(appeal.createdAt).toLocaleDateString('pt-BR')}
-                      </CardDescription>
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <FileText className="h-5 w-5 text-blue-600" />
+                        <h3 className="text-lg font-medium text-gray-900">
+                          Recurso {appeal.infractionNumber || 'N/A'}
+                        </h3>
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          appeal.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                          appeal.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
+                          appeal.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {getStatusText(appeal.status)}
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-600 space-y-1">
+                        <p>Placa: <span className="font-medium">{appeal.vehiclePlate || 'N/A'}</span></p>
+                        <p>Criado em {new Date(appeal.createdAt).toLocaleDateString('pt-BR')}</p>
+                      </div>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(appeal.status)}`}>
-                      {getStatusText(appeal.status)}
-                    </span>
+                    <div className="flex-shrink-0 ml-4">
+                      <Link href={`/dashboard/appeals/${appeal.id}`}>
+                        <Button variant="outline" size="sm">
+                          Ver Detalhes
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <Link href={`/dashboard/appeals/${appeal.id}`}>
-                    <Button>Ver Detalhes</Button>
-                  </Link>
                 </CardContent>
               </Card>
             ))}

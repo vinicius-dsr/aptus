@@ -70,30 +70,24 @@ export default function DashboardPage() {
         </div>
 
         {!isCheckingProfile && !profileComplete && (
-          <Card className="border-orange-200 bg-orange-50">
-            <CardContent className="pt-6">
-              <div className="flex gap-4">
-                <AlertCircle className="h-5 w-5 text-orange-600 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <h3 className="font-semibold text-orange-900 mb-2">
-                    ⚠️ Complete seu perfil primeiro!
-                  </h3>
-                  <p className="text-sm text-orange-800 mb-3">
-                    Para gerar recursos com seus dados completos (nome, CPF, telefone, endereço),
-                    você precisa preencher seu perfil.
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => router.push('/dashboard/profile')}
-                    className="border-orange-300 hover:bg-orange-100"
-                  >
-                    Ir para Meu Perfil
-                  </Button>
-                </div>
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+            <div className="flex items-start space-x-3">
+              <AlertCircle className="h-5 w-5 text-orange-600 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm text-orange-800">
+                  Complete seu perfil para gerar recursos com seus dados pessoais.
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => router.push('/dashboard/profile')}
+                  className="mt-3 border-orange-300 hover:bg-orange-100"
+                >
+                  Completar Perfil
+                </Button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         <AppealForm />

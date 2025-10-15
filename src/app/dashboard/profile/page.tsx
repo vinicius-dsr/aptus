@@ -191,22 +191,16 @@ export default function ProfilePage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 max-w-4xl">
-        <div>
+      <div className="max-w-2xl">
+        <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Meu Perfil</h1>
-          <p className="text-gray-600 mt-2">Gerencie suas informações pessoais e configurações</p>
+          <p className="text-gray-600 mt-2">Mantenha seus dados atualizados</p>
         </div>
 
         {/* Informações Pessoais */}
-        <Card>
+        <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              Informações Pessoais
-            </CardTitle>
-            <CardDescription>
-              Atualize seus dados pessoais. Essas informações serão usadas nos recursos gerados.
-            </CardDescription>
+            <CardTitle>Dados Pessoais</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleUpdateProfile} className="space-y-4">
@@ -222,13 +216,11 @@ export default function ProfilePage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">E-mail *</Label>
+                  <Label htmlFor="email">E-mail</Label>
                   <Input
                     id="email"
                     type="email"
                     value={formData.email}
-                    onChange={(e) => handleChange('email', e.target.value)}
-                    required
                     disabled
                     className="bg-gray-50"
                   />
@@ -261,14 +253,11 @@ export default function ProfilePage() {
                   <Label htmlFor="address">Endereço Completo *</Label>
                   <Input
                     id="address"
-                    placeholder="Rua, Número, Bairro, Cidade - Estado, CEP"
+                    placeholder="Rua, número, cidade - UF"
                     value={formData.address}
                     onChange={(e) => handleChange('address', e.target.value)}
                     required
                   />
-                  <p className="text-xs text-gray-500">
-                    Usado na geração dos recursos. Ex: Rua das Flores, 123 - Centro, São Paulo/SP, CEP 01234-567
-                  </p>
                 </div>
               </div>
 
@@ -282,7 +271,7 @@ export default function ProfilePage() {
                   ) : (
                     <>
                       <Save className="mr-2 h-4 w-4" />
-                      Salvar Alterações
+                      Salvar
                     </>
                   )}
                 </Button>
@@ -294,13 +283,7 @@ export default function ProfilePage() {
         {/* Alterar Senha */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Lock className="h-5 w-5" />
-              Alterar Senha
-            </CardTitle>
-            <CardDescription>
-              Mantenha sua conta segura alterando sua senha regularmente.
-            </CardDescription>
+            <CardTitle>Alterar Senha</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleChangePassword} className="space-y-4">
@@ -326,7 +309,6 @@ export default function ProfilePage() {
                     required
                     minLength={6}
                   />
-                  <p className="text-xs text-gray-500">Mínimo 6 caracteres</p>
                 </div>
 
                 <div className="space-y-2">

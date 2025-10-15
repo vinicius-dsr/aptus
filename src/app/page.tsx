@@ -1,23 +1,11 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { FileText, Upload, Bot, Send, Check, Star, Zap, Crown, ArrowRight, Sparkles } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { FileText, Upload, Bot, Send, Check, ArrowRight, Sparkles } from 'lucide-react'
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Floating CTA Button for Mobile */}
-      <div className="fixed bottom-6 right-6 z-50 sm:hidden">
-        <Link href="/auth/register">
-          <Button
-            size="lg"
-            className="rounded-full w-14 h-14 bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
-          >
-            <Sparkles className="h-6 w-6" />
-          </Button>
-        </Link>
-      </div>
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -51,345 +39,199 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
         <div className="text-center max-w-4xl mx-auto">
-          <Badge variant="secondary" className="mb-6 text-sm">
-            🚀 Plataforma SaaS Completa
-          </Badge>
-          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight">
             Recursos de Multas<br />
-            <span className="text-blue-600">Automatizados com IA</span>
+            <span className="text-blue-600">Rápidos e Seguros</span>
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Envie seus documentos e receba um recurso de multa completo,
-            personalizado e pronto para envio em minutos com nossa IA avançada.
+          <p className="text-xl sm:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Gere recursos completos contra multas em minutos.
+            Com ou sem CNH, nós ajudamos você.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Link href="/auth/register">
               <Button
                 size="lg"
-                className="text-lg px-8 py-4 w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group"
+                className="text-xl px-10 py-6 w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                Criar Recurso Agora
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                Criar Meu Recurso
+                <ArrowRight className="ml-3 h-6 w-6" />
               </Button>
             </Link>
             <Link href="#planos">
               <Button
                 variant="outline"
                 size="lg"
-                className="text-lg px-8 py-4 w-full sm:w-auto border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-300 group"
+                className="text-xl px-10 py-6 w-full sm:w-auto border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-300"
               >
                 Ver Planos
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-        <div className="text-center mb-12 sm:mb-16">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+      {/* How It Works */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
             Como Funciona
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Processo simples e automatizado em 4 etapas
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Processo simples em 3 etapas
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-4">
-              <div className="mx-auto mb-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <Upload className="h-6 w-6 text-blue-600" />
-              </div>
-              <CardTitle className="text-lg">1. Identificação</CardTitle>
-              <CardDescription className="text-sm">
-                Informe se possui CNH válida. Com ou sem CNH, você pode recorrer!
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-4">
-              <div className="mx-auto mb-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <FileText className="h-6 w-6 text-blue-600" />
-              </div>
-              <CardTitle className="text-lg">2. Upload</CardTitle>
-              <CardDescription className="text-sm">
-                Envie CRLV e auto de infração. Se tiver CNH, inclua também.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-4">
-              <div className="mx-auto mb-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <Bot className="h-6 w-6 text-blue-600" />
-              </div>
-              <CardTitle className="text-lg">3. Geração</CardTitle>
-              <CardDescription className="text-sm">
-                IA gera recurso personalizado com argumentos jurídicos sólidos
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-4">
-              <div className="mx-auto mb-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <Send className="h-6 w-6 text-blue-600" />
-              </div>
-              <CardTitle className="text-lg">4. Envio</CardTitle>
-              <CardDescription className="text-sm">
-                Baixe o PDF profissional ou envie direto por e-mail
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
-      </section>
-
-      {/* Special Section for Users Without CNH */}
-      <section className="bg-gradient-to-r from-green-50 to-blue-50 py-12 sm:py-16 lg:py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              🚗 Sem CNH? Mesmo assim você pode recorrer!
-            </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              De acordo com o CTB (art. 281–282), o direito de defesa administrativa é garantido a todos.
-              Gere defesa prévia, recurso do proprietário ou indicação de condutor automaticamente.
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 max-w-6xl mx-auto">
+          <div className="text-center">
+            <div className="mx-auto mb-6 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+              <Upload className="h-8 w-8 text-blue-600" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">1. Faça Upload</h3>
+            <p className="text-lg text-gray-600">
+              Envie seus documentos: CRLV, auto de infração e CNH (se tiver).
+              Sem CNH? Podemos ajudar também.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <Card className="text-center hover:shadow-lg transition-all">
-              <CardHeader className="pb-4">
-                <div className="mx-auto mb-4 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <FileText className="h-6 w-6 text-green-600" />
-                </div>
-                <CardTitle className="text-lg">Defesa Prévia</CardTitle>
-                <CardDescription className="text-sm">
-                  Antes da penalidade ser confirmada, apresente sua defesa
-                </CardDescription>
-              </CardHeader>
-            </Card>
 
-            <Card className="text-center hover:shadow-lg transition-all">
-              <CardHeader className="pb-4">
-                <div className="mx-auto mb-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Bot className="h-6 w-6 text-blue-600" />
-                </div>
-                <CardTitle className="text-lg">Recurso do Proprietário</CardTitle>
-                <CardDescription className="text-sm">
-                  Quando a multa está vinculada ao veículo, não à pessoa
-                </CardDescription>
-              </CardHeader>
-            </Card>
+          <div className="text-center">
+            <div className="mx-auto mb-6 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+              <Bot className="h-8 w-8 text-blue-600" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">2. Gere Automaticamente</h3>
+            <p className="text-lg text-gray-600">
+              Nossa tecnologia analisa seus documentos e cria um recurso
+              personalizado com argumentos jurídicos sólidos.
+            </p>
+          </div>
 
-            <Card className="text-center hover:shadow-lg transition-all">
-              <CardHeader className="pb-4">
-                <div className="mx-auto mb-4 w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                  <Send className="h-6 w-6 text-purple-600" />
-                </div>
-                <CardTitle className="text-lg">Indicação de Condutor</CardTitle>
-                <CardDescription className="text-sm">
-                  Saiba quem estava dirigindo? Indique formalmente
-                </CardDescription>
-              </CardHeader>
-            </Card>
+          <div className="text-center">
+            <div className="mx-auto mb-6 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+              <Send className="h-8 w-8 text-blue-600" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">3. Baixe e Envie</h3>
+            <p className="text-lg text-gray-600">
+              Receba seu recurso em PDF profissional pronto para envio
+              ao órgão responsável.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Pricing Section */}
-      <section id="planos" className="bg-gray-50 py-12 sm:py-16 lg:py-20">
+      <section id="planos" className="bg-gray-50 py-16 sm:py-20 lg:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Escolha Seu Plano
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              Planos Simples
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Planos flexíveis para todos os perfis de motoristas
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Escolha o plano ideal para suas necessidades
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 max-w-6xl mx-auto">
             {/* Gratuito */}
-            <Card className="relative hover:shadow-xl transition-all duration-300 border-2">
-              <CardHeader className="text-center pb-4">
-                <div className="mx-auto mb-4 w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                  <FileText className="h-6 w-6 text-gray-600" />
-                </div>
-                <CardTitle className="text-xl">Gratuito</CardTitle>
-                <div className="text-3xl font-bold text-gray-900">R$ 0</div>
-                <p className="text-sm text-gray-500">/mês</p>
+            <Card className="relative text-center">
+              <CardHeader className="pb-8">
+                <CardTitle className="text-2xl">Gratuito</CardTitle>
+                <div className="text-4xl font-bold text-gray-900">R$ 0</div>
+                <p className="text-gray-500">/mês</p>
               </CardHeader>
               <CardContent className="pt-0">
-                <p className="text-center text-sm text-gray-600 mb-6">Ideal para testar o serviço</p>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    2 recursos por mês
+                <p className="text-center text-gray-600 mb-8">Perfeito para testar</p>
+                <ul className="space-y-4 mb-8 text-left">
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>2 recursos por mês</span>
                   </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    Geração com IA
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>PDF profissional</span>
                   </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    Download em PDF
-                  </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    Suporte por email
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>Suporte básico</span>
                   </li>
                 </ul>
                 <Link href="/auth/register" className="w-full">
-                  <Button
-                    variant="outline"
-                    className="w-full py-3 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 transition-all duration-300 group"
-                  >
-                    Começar Gratuitamente
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <Button className="w-full py-3">
+                    Começar Grátis
                   </Button>
                 </Link>
               </CardContent>
             </Card>
 
             {/* Básico */}
-            <Card className="relative hover:shadow-xl transition-all duration-300 border-2">
-              <CardHeader className="text-center pb-4">
-                <div className="mx-auto mb-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Zap className="h-6 w-6 text-blue-600" />
-                </div>
-                <CardTitle className="text-xl">Básico</CardTitle>
-                <div className="text-3xl font-bold text-gray-900">R$ 29</div>
-                <p className="text-sm text-gray-500">/mês</p>
+            <Card className="relative text-center border-2 border-blue-500 shadow-lg scale-105">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                  Mais Popular
+                </span>
+              </div>
+              <CardHeader className="pb-8">
+                <CardTitle className="text-2xl">Básico</CardTitle>
+                <div className="text-4xl font-bold text-gray-900">R$ 29</div>
+                <p className="text-gray-500">/mês</p>
               </CardHeader>
               <CardContent className="pt-0">
-                <p className="text-center text-sm text-gray-600 mb-6">Para motoristas frequentes</p>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    10 recursos por mês
+                <p className="text-center text-gray-600 mb-8">Para uso regular</p>
+                <ul className="space-y-4 mb-8 text-left">
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>10 recursos por mês</span>
                   </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    IA avançada
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>Suporte prioritário</span>
                   </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    Envio por email
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>Histórico completo</span>
                   </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    Histórico completo
-                  </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    Suporte prioritário
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>Envio por email</span>
                   </li>
                 </ul>
                 <Link href="/auth/register" className="w-full">
-                  <Button
-                    className="w-full py-3 bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transition-all duration-300 group"
-                  >
+                  <Button className="w-full py-3 bg-blue-600 hover:bg-blue-700">
                     Escolher Básico
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
               </CardContent>
             </Card>
 
             {/* Profissional */}
-            <Card className="relative hover:shadow-xl transition-all duration-300 border-2 border-blue-500 shadow-lg scale-105">
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-blue-500 text-white px-3 py-1">Mais Popular</Badge>
-              </div>
-              <CardHeader className="text-center pb-4">
-                <div className="mx-auto mb-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Star className="h-6 w-6 text-blue-600" />
-                </div>
-                <CardTitle className="text-xl">Profissional</CardTitle>
-                <div className="text-3xl font-bold text-gray-900">R$ 79</div>
-                <p className="text-sm text-gray-500">/mês</p>
+            <Card className="relative text-center">
+              <CardHeader className="pb-8">
+                <CardTitle className="text-2xl">Profissional</CardTitle>
+                <div className="text-4xl font-bold text-gray-900">R$ 79</div>
+                <p className="text-gray-500">/mês</p>
               </CardHeader>
               <CardContent className="pt-0">
-                <p className="text-center text-sm text-gray-600 mb-6">Para profissionais do volante</p>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    50 recursos por mês
+                <p className="text-center text-gray-600 mb-8">Para profissionais</p>
+                <ul className="space-y-4 mb-8 text-left">
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>50 recursos por mês</span>
                   </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    IA com contexto avançado
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>Suporte 24/7</span>
                   </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    Templates personalizados
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>Múltiplos usuários</span>
                   </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    Múltiplos usuários
-                  </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    Suporte 24/7
+                  <li className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span>Templates avançados</span>
                   </li>
                 </ul>
                 <Link href="/auth/register" className="w-full">
-                  <Button
-                    className="w-full py-3 bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 group font-semibold"
-                  >
+                  <Button variant="outline" className="w-full py-3">
                     Escolher Profissional
-                    <Sparkles className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* Empresarial */}
-            <Card className="relative hover:shadow-xl transition-all duration-300 border-2">
-              <CardHeader className="text-center pb-4">
-                <div className="mx-auto mb-4 w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                  <Crown className="h-6 w-6 text-purple-600" />
-                </div>
-                <CardTitle className="text-xl">Empresarial</CardTitle>
-                <div className="text-3xl font-bold text-gray-900">R$ 199</div>
-                <p className="text-sm text-gray-500">/mês</p>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <p className="text-center text-sm text-gray-600 mb-6">Para frotas e empresas</p>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    Recursos ilimitados
-                  </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    IA customizada
-                  </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    API de integração
-                  </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    White label
-                  </li>
-                  <li className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                    SLA garantido
-                  </li>
-                </ul>
-                <Link href="/auth/register" className="w-full">
-                  <Button
-                    variant="outline"
-                    className="w-full py-3 border-2 border-purple-300 hover:border-purple-500 hover:bg-purple-50 transition-all duration-300 group text-purple-700 hover:text-purple-900"
-                  >
-                    Fale Conosco
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
               </CardContent>
@@ -399,50 +241,37 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-12 sm:py-16 lg:py-20">
+      <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">
-            Pronto para Criar Seu Recurso?
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+            Pronto para Resolver Sua Multa?
           </h2>
-          <p className="text-lg sm:text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            Junte-se a centenas de motoristas que já recorreram com sucesso usando nossa plataforma
+          <p className="text-xl sm:text-2xl mb-10 opacity-90 max-w-3xl mx-auto">
+            Junte-se a milhares de motoristas que já economizaram tempo e dinheiro
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/auth/register">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="text-lg px-8 py-4 w-full sm:w-auto bg-white text-blue-600 hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group font-semibold"
-              >
-                Começar Gratuitamente
-                <Sparkles className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link href="#planos">
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-8 py-4 w-full sm:w-auto border-2 border-white/80 text-blue-100 hover:bg-white hover:text-blue-600 hover:border-white transition-all duration-300 group font-semibold bg-white/10 backdrop-blur-sm"
-              >
-                Ver Todos os Planos
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
-          </div>
+          <Link href="/auth/register">
+            <Button
+              size="lg"
+              variant="secondary"
+              className="text-xl px-10 py-6 bg-white text-blue-600 hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              Criar Meu Primeiro Recurso
+              <Sparkles className="ml-3 h-6 w-6" />
+            </Button>
+          </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t bg-white py-8 sm:py-12">
+      <footer className="border-t bg-white py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+            <div className="flex items-center space-x-2 mb-6 md:mb-0">
               <FileText className="h-6 w-6 text-blue-600" />
               <span className="text-lg font-bold text-gray-900">Aptus</span>
             </div>
             <div className="text-center md:text-right text-gray-600">
               <p className="text-sm">&copy; 2024 Aptus. Todos os direitos reservados.</p>
-              <p className="text-xs mt-1">Recursos jurídicos automatizados com IA</p>
             </div>
           </div>
         </div>
