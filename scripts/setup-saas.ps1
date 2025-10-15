@@ -62,8 +62,8 @@ Write-Host "   🚀 Pro         - R$ 79,90  (50 recursos/mês)" -ForegroundColor
 Write-Host "   🏢 Enterprise  - R$ 199,90 (999 recursos/mês)`n" -ForegroundColor White
 
 Write-Host "👤 Usuários Criados:" -ForegroundColor Cyan
-Write-Host "   Admin: admin@aptus.com / admin123" -ForegroundColor White
-Write-Host "   Demo:  demo@aptus.com  / demo123 (Plano Gratuito)`n" -ForegroundColor White
+Write-Host "   Admin: Configure ADMIN_EMAIL e ADMIN_PASSWORD no .env" -ForegroundColor White
+Write-Host "   Demo: Removido para segurança" -ForegroundColor White
 
 Write-Host "🌐 URLs Disponíveis:" -ForegroundColor Cyan
 Write-Host "   Dashboard:     http://localhost:3000/dashboard" -ForegroundColor White

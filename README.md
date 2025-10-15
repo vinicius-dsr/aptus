@@ -152,8 +152,8 @@ Session       - Sessões ativas
 # Isso cria:
 # - Tabelas de planos e assinaturas
 # - 4 planos (Gratuito, Básico, Pro, Enterprise)
-# - Admin: admin@aptus.com / admin123
-# - Demo:  demo@aptus.com / demo123
+# - Admin: Configure ADMIN_EMAIL e ADMIN_PASSWORD no .env
+# - Demo: Removido para segurança
 ```
 
 Veja **SAAS.md** para documentação completa do sistema SaaS.

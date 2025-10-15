@@ -91,11 +91,17 @@ async function main() {
     }
   }
 
-  // 2. Criar usuário admin
+  // 2. Criar usuário admin (requer variáveis de ambiente)
   console.log('\n👤 Criando usuário administrador...')
   
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@aptus.com'
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminPassword = process.env.ADMIN_PASSWORD
+
+  if (!adminEmail || !adminPassword) {
+    console.log('   ❌ ADMIN_EMAIL e ADMIN_PASSWORD devem estar definidos nas variáveis de ambiente')
+    console.log('   Exemplo: ADMIN_EMAIL=admin@aptus.com ADMIN_PASSWORD=senha_segura')
+    process.exit(1)
+  }
 
   const existingAdmin = await prisma.user.findUnique({
     where: { email: adminEmail },
@@ -117,51 +123,14 @@ async function main() {
 
     console.log(`   ✅ Admin criado com sucesso!`)
     console.log(`   📧 Email: ${admin.email}`)
-    console.log(`   🔑 Senha: ${adminPassword}`)
     console.log(`   ⚠️  ALTERE A SENHA APÓS O PRIMEIRO LOGIN!`)
-  }
-
-  // 3. Criar usuário demo (opcional)
-  console.log('\n🎭 Criando usuário demo...')
-  
-  const demoEmail = 'demo@aptus.com'
-  const existingDemo = await prisma.user.findUnique({
-    where: { email: demoEmail }
-  })
-
-  if (!existingDemo) {
-    const hashedPassword = await bcrypt.hash('demo123', 10)
-    const freePlan = await prisma.plan.findUnique({ where: { name: 'free' } })
-
-    if (freePlan) {
-      const demoUser = await prisma.user.create({
-        data: {
-          name: 'Usuário Demo',
-          email: demoEmail,
-          password: hashedPassword,
-          role: 'USER',
-          subscription: {
-            create: {
-              planId: freePlan.id,
-              appealsLimit: freePlan.appealsPerMonth,
-              appealsUsed: 0,
-              currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 dias
-              status: 'ACTIVE'
-            }
-          }
-        }
-      })
-      console.log(`   ✅ Usuário demo criado: ${demoEmail} / demo123`)
-    }
-  } else {
-    console.log(`   ⏭️  Usuário demo já existe`)
   }
 
   console.log('\n🎉 Seed concluído com sucesso!')
   console.log('\n📋 Resumo:')
   console.log('   ✅ 4 planos criados')
-  console.log('   ✅ Admin criado')
-  console.log('   ✅ Usuário demo criado')
+  console.log('   ✅ Admin criado (se configurado)')
+
 }
 
 main()
