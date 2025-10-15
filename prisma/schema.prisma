@@ -44,6 +44,7 @@ model User {
   cpf           String?        @unique
   phone         String?
   address       String?
+  possuiCnh     Boolean?       // Se o usuário possui CNH válida
   image         String?
   role          UserRole       @default(USER)
   isActive      Boolean        @default(true)
@@ -83,7 +84,11 @@ model Appeal {
   // Documentos enviados
   cnhDocument       String?
   crlvDocument      String?
+  rgDocument        String?       // Para usuários sem CNH
   infractionDocument String?
+  
+  // Contexto do recurso
+  possuiCnh         Boolean?      // Se o usuário possui CNH para este recurso
   
   // Dados do recurso gerado
   appealText        String?       @db.Text
@@ -131,6 +136,14 @@ model Subscription {
   
   @@index([userId])
   @@index([planId])
+}
+
+model Template {
+  id        String   @id @default(cuid())
+  type      String   // "recurso", "defesa_previa", "indicacao_condutor"
+  target    String   // "com_cnh" | "sem_cnh"
+  content   String   // modelo base do texto
+  createdAt DateTime @default(now())
 }
 
 enum UserRole {

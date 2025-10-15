@@ -104,9 +104,9 @@ export default function Home() {
               <div className="mx-auto mb-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                 <Upload className="h-6 w-6 text-blue-600" />
               </div>
-              <CardTitle className="text-lg">1. Upload</CardTitle>
+              <CardTitle className="text-lg">1. Identificação</CardTitle>
               <CardDescription className="text-sm">
-                Envie CNH, CRLV e auto de infração de forma segura
+                Informe se possui CNH válida. Com ou sem CNH, você pode recorrer!
               </CardDescription>
             </CardHeader>
           </Card>
@@ -116,9 +116,9 @@ export default function Home() {
               <div className="mx-auto mb-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                 <FileText className="h-6 w-6 text-blue-600" />
               </div>
-              <CardTitle className="text-lg">2. Extração</CardTitle>
+              <CardTitle className="text-lg">2. Upload</CardTitle>
               <CardDescription className="text-sm">
-                OCR inteligente extrai automaticamente os dados dos documentos
+                Envie CRLV e auto de infração. Se tiver CNH, inclua também.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -146,6 +146,58 @@ export default function Home() {
               </CardDescription>
             </CardHeader>
           </Card>
+        </div>
+      </section>
+
+      {/* Special Section for Users Without CNH */}
+      <section className="bg-gradient-to-r from-green-50 to-blue-50 py-12 sm:py-16 lg:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+              🚗 Sem CNH? Mesmo assim você pode recorrer!
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              De acordo com o CTB (art. 281–282), o direito de defesa administrativa é garantido a todos.
+              Gere defesa prévia, recurso do proprietário ou indicação de condutor automaticamente.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <Card className="text-center hover:shadow-lg transition-all">
+              <CardHeader className="pb-4">
+                <div className="mx-auto mb-4 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <FileText className="h-6 w-6 text-green-600" />
+                </div>
+                <CardTitle className="text-lg">Defesa Prévia</CardTitle>
+                <CardDescription className="text-sm">
+                  Antes da penalidade ser confirmada, apresente sua defesa
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-all">
+              <CardHeader className="pb-4">
+                <div className="mx-auto mb-4 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Bot className="h-6 w-6 text-blue-600" />
+                </div>
+                <CardTitle className="text-lg">Recurso do Proprietário</CardTitle>
+                <CardDescription className="text-sm">
+                  Quando a multa está vinculada ao veículo, não à pessoa
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-all">
+              <CardHeader className="pb-4">
+                <div className="mx-auto mb-4 w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                  <Send className="h-6 w-6 text-purple-600" />
+                </div>
+                <CardTitle className="text-lg">Indicação de Condutor</CardTitle>
+                <CardDescription className="text-sm">
+                  Saiba quem estava dirigindo? Indique formalmente
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
         </div>
       </section>
 

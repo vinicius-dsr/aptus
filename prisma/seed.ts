@@ -126,10 +126,141 @@ async function main() {
     console.log(`   ⚠️  ALTERE A SENHA APÓS O PRIMEIRO LOGIN!`)
   }
 
+  // 3. Criar templates de recursos
+  console.log('\n📄 Criando templates de recursos...')
+  
+  const templates = [
+    {
+      type: 'recurso',
+      target: 'com_cnh',
+      content: `RECURSO ADMINISTRATIVO DE INFRAÇÃO DE TRÂNSITO
+
+ILUSTRÍSSIMO(A) SENHOR(A) PRESIDENTE DA JUNTA ADMINISTRATIVA DE RECURSOS DE INFRAÇÕES (JARI)
+
+RECORRENTE: [NOME_COMPLETO]
+CPF: [CPF]
+ENDEREÇO: [ENDERECO]
+
+VEÍCULO:
+PLACA: [PLACA]
+RENAVAM: [RENAVAM]
+
+I. EXPOSIÇÃO DOS FATOS
+
+Venho, respeitosamente, apresentar RECURSO ADMINISTRATIVO contra o Auto de Infração nº [NUMERO_AUTO], lavrado em [DATA_INFRACAO], pelo órgão [ORGAO_AUTUADOR], pelo cometimento da infração prevista no art. [CODIGO_INFRACAO] do CTB.
+
+II. FUNDAMENTAÇÃO JURÍDICA
+
+Art. 280 do CTB - O auto de infração será lavrado no local da infração, sendo proibida a remoção do veículo antes da lavratura.
+Art. 281 do CTB - O auto de infração deverá conter, obrigatoriamente, as seguintes indicações: [...]
+
+III. DOS PEDIDOS
+
+Diante do exposto, requer-se:
+a) Arquivamento do auto de infração
+b) Declaração de insubsistência do registro
+c) Concessão de efeito suspensivo
+
+[LOCAL_DATA]
+
+_____________________________
+Assinatura do Recorrente`
+    },
+    {
+      type: 'defesa_previa',
+      target: 'sem_cnh',
+      content: `DEFESA PRÉVIA CONTRA MULTA DE TRÂNSITO
+
+ILUSTRÍSSIMO(A) SENHOR(A) [ORGAO_AUTUADOR]
+
+RESPONSÁVEL: [NOME_COMPLETO]
+CPF: [CPF]
+ENDEREÇO: [ENDERECO]
+
+VEÍCULO:
+PLACA: [PLACA]
+RENAVAM: [RENAVAM]
+
+I. EXPOSIÇÃO DOS FATOS
+
+Venho, respeitosamente, apresentar DEFESA PRÉVIA contra a Notificação de Infração nº [NUMERO_AUTO], lavrada em [DATA_INFRACAO], pelo órgão [ORGAO_AUTUADOR].
+
+IMPORTANTE: Não possuo Carteira Nacional de Habilitação válida, razão pela qual não conduzia o veículo no momento da infração.
+
+II. FUNDAMENTAÇÃO JURÍDICA
+
+Art. 257 do CTB - Ao proprietário do veículo cabe a responsabilidade pelo pagamento das multas, excetuadas as situações em que o veículo seja furtado ou roubado.
+Art. 281 do CTB - Garantido o direito à ampla defesa e ao contraditório em sede administrativa.
+
+III. DOS PEDIDOS
+
+Diante do exposto, requer-se:
+a) Arquivamento da defesa/notificação
+b) Possibilidade de indicação do verdadeiro condutor
+c) Concessão de prazo para apresentação de condutor
+
+[LOCAL_DATA]
+
+_____________________________
+Assinatura do Proprietário`
+    },
+    {
+      type: 'indicacao_condutor',
+      target: 'sem_cnh',
+      content: `INDICAÇÃO DE CONDUTOR
+
+ILUSTRÍSSIMO(A) SENHOR(A) [ORGAO_AUTUADOR]
+
+PROPRIETÁRIO: [NOME_COMPLETO]
+CPF: [CPF]
+
+CONDUTOR INDICADO: [NOME_CONDUTOR]
+CPF: [CPF_CONDUTOR]
+CNH: [NUMERO_CNH]
+
+VEÍCULO:
+PLACA: [PLACA]
+RENAVAM: [RENAVAM]
+
+I. DA INDICAÇÃO
+
+Venho, por meio desta, indicar [NOME_CONDUTOR], CPF [CPF_CONDUTOR], portador da CNH nº [NUMERO_CNH], como o verdadeiro condutor do veículo de placa [PLACA] no momento da infração registrada no Auto nº [NUMERO_AUTO].
+
+II. DECLARAÇÃO
+
+Declaro, sob as penas da lei, que as informações acima são verdadeiras e que assumo integral responsabilidade pelas mesmas.
+
+[LOCAL_DATA]
+
+_____________________________
+Assinatura do Proprietário
+
+_____________________________
+Assinatura do Condutor Indicado`
+    }
+  ]
+
+  for (const templateData of templates) {
+    const existingTemplate = await prisma.template.findFirst({
+      where: {
+        type: templateData.type,
+        target: templateData.target
+      }
+    })
+
+    if (existingTemplate) {
+      console.log(`   ⏭️  Template ${templateData.type} (${templateData.target}) já existe`)
+    } else {
+      await prisma.template.create({ data: templateData })
+      console.log(`   ✅ Template ${templateData.type} (${templateData.target}) criado`)
+    }
+  }
+
   console.log('\n🎉 Seed concluído com sucesso!')
   console.log('\n📋 Resumo:')
   console.log('   ✅ 4 planos criados')
   console.log('   ✅ Admin criado (se configurado)')
+  console.log('   ✅ Templates de recursos criados')
 
 }
 

@@ -12,21 +12,47 @@ export async function POST(req: Request) {
     }
 
     const formData = await req.formData()
-    const cnhFile = formData.get('cnh') as File
+    const possuiCnh = formData.get('possuiCnh') === 'true'
+    const cnhFile = formData.get('cnh') as File | null
     const crlvFile = formData.get('crlv') as File
+    const rgFile = formData.get('rg') as File | null
     const infractionFile = formData.get('infraction') as File
 
-    if (!cnhFile || !crlvFile || !infractionFile) {
+    // Validações condicionais
+    if (!crlvFile || !infractionFile) {
       return NextResponse.json(
-        { error: 'Todos os documentos são obrigatórios' },
+        { error: 'CRLV e Auto de Infração são obrigatórios' },
         { status: 400 }
       )
     }
 
-    // Converter arquivos para Buffer (processar em memória - Vercel serverless)
-    const cnhBuffer = Buffer.from(await cnhFile.arrayBuffer())
+    if (possuiCnh && !cnhFile) {
+      return NextResponse.json(
+        { error: 'CNH é obrigatória quando você possui CNH válida' },
+        { status: 400 }
+      )
+    }
+
+    if (!possuiCnh && !rgFile) {
+      return NextResponse.json(
+        { error: 'RG/CPF é obrigatório quando você não possui CNH' },
+        { status: 400 }
+      )
+    }
+
+    // Converter arquivos para Buffer
     const crlvBuffer = Buffer.from(await crlvFile.arrayBuffer())
     const infractionBuffer = Buffer.from(await infractionFile.arrayBuffer())
+    let cnhBuffer: Buffer | null = null
+    let rgBuffer: Buffer | null = null
+
+    if (cnhFile) {
+      cnhBuffer = Buffer.from(await cnhFile.arrayBuffer())
+    }
+
+    if (rgFile) {
+      rgBuffer = Buffer.from(await rgFile.arrayBuffer())
+    }
 
     // Buscar dados do usuário logado
     const user = await prisma.user.findUnique({
@@ -40,12 +66,20 @@ export async function POST(req: Request) {
       },
     })
 
-    // ✨ Analisar documentos com Gemini Vision (substitui OCR)
+    // ✨ Analisar documentos com Gemini Vision
     console.log('Analisando documentos com Gemini Vision...')
     let extractedData: any = {}
     
     try {
-      extractedData = await analyzeAllDocuments(cnhBuffer, crlvBuffer, infractionBuffer)
+      // Passar apenas os documentos disponíveis
+      const documentsToAnalyze = {
+        cnh: cnhBuffer,
+        crlv: crlvBuffer,
+        rg: rgBuffer,
+        infraction: infractionBuffer,
+      }
+      
+      extractedData = await analyzeAllDocuments(documentsToAnalyze, possuiCnh)
       console.log('Gemini Vision concluído com sucesso!')
     } catch (visionError) {
       console.warn('Gemini Vision falhou, usando dados vazios:', visionError)
@@ -53,7 +87,6 @@ export async function POST(req: Request) {
     }
 
     // Combinar dados do usuário com dados extraídos
-    // PRIORIDADE: Dados do usuário são sempre usados
     const completeData = {
       // Dados extraídos dos documentos primeiro
       ...extractedData,
@@ -63,6 +96,7 @@ export async function POST(req: Request) {
       driverPhone: user?.phone,
       driverAddress: user?.address,
       driverEmail: user?.email,
+      possuiCnh,
     }
 
     console.log('📊 Dados combinados para o recurso:', {
@@ -72,9 +106,10 @@ export async function POST(req: Request) {
       driverAddress: completeData.driverAddress,
       vehiclePlate: completeData.vehiclePlate,
       infractionNumber: completeData.infractionNumber,
+      possuiCnh: completeData.possuiCnh,
     })
 
-    // Criar registro no banco (sem salvar arquivos - Vercel serverless)
+    // Criar registro no banco
     const appeal = await prisma.appeal.create({
       data: {
         userId: session.user.id,
@@ -87,10 +122,11 @@ export async function POST(req: Request) {
         infractionCode: completeData.infractionCode,
         agency: completeData.agency,
         // Documentos não são salvos permanentemente em serverless
-        // Para produção, use Vercel Blob Storage ou Supabase Storage
         cnhDocument: null,
         crlvDocument: null,
+        rgDocument: null,
         infractionDocument: null,
+        possuiCnh: possuiCnh,
         status: 'PROCESSING',
       },
     })
