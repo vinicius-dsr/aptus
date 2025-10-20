@@ -15,7 +15,7 @@ export default function Header() {
             </div>
           </Link>
           <nav className="flex space-x-2 items-center">
-            <Link href="">
+            <Link href="#works">
               <Button
                 variant="ghost"
                 size="sm"
@@ -24,7 +24,7 @@ export default function Header() {
                 Como funciona
               </Button>
             </Link>
-            <Link href="">
+            <Link href="#planos">
               <Button
                 variant="ghost"
                 size="sm"
