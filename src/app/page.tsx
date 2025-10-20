@@ -2,12 +2,15 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { FileText, Upload, Bot, Send, Check, ArrowRight, Sparkles } from 'lucide-react'
+import Header from '@/components/header'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+
+    <div className="min-h-screen ">
+      <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"></div>
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+      {/* <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
@@ -29,23 +32,23 @@ export default function Home() {
                   size="sm"
                   className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105"
                 >
-                  <Sparkles className="h-4 w-4 mr-2" />
                   Começar Agora
                 </Button>
               </Link>
             </div>
           </div>
         </div>
-      </header>
+      </header> */}
+      <Header />
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight">
             Recursos de Multas<br />
-            <span className="text-blue-600">Rápidos e Seguros</span>
+            <span className="text-blue-600 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-500">Rápidos e Seguros</span>
           </h1>
-          <p className="text-xl sm:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl sm:text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
             Gere recursos completos contra multas em minutos.
             Com ou sem CNH, nós ajudamos você.
           </p>
@@ -53,17 +56,17 @@ export default function Home() {
             <Link href="/auth/register">
               <Button
                 size="lg"
-                className="text-xl px-10 py-6 w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className=" px-10 py-6 w-full sm:w-auto hover:shadow-xl transition-all duration-300 "
               >
                 Criar Meu Recurso
-                <ArrowRight className="ml-3 h-6 w-6" />
+                <ArrowRight className="ml-3 h-5 w-4" />
               </Button>
             </Link>
             <Link href="#planos">
               <Button
                 variant="outline"
                 size="lg"
-                className="text-xl px-10 py-6 w-full sm:w-auto border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-300"
+                className="px-10 py-6 w-full sm:w-auto "
               >
                 Ver Planos
               </Button>
@@ -241,22 +244,21 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-16 sm:py-20">
+      <section className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
             Pronto para Resolver Sua Multa?
           </h2>
-          <p className="text-xl sm:text-2xl mb-10 opacity-90 max-w-3xl mx-auto">
+          <p className="text-xl mb-10 opacity-90 max-w-3xl mx-auto">
             Junte-se a milhares de motoristas que já economizaram tempo e dinheiro
           </p>
           <Link href="/auth/register">
             <Button
               size="lg"
               variant="secondary"
-              className="text-xl px-10 py-6 bg-white text-blue-600 hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="px-10 py-6 bg-white text-blue-600 hover:bg-gray-100 shadow-lg hover:shadow-xl font-medium"
             >
               Criar Meu Primeiro Recurso
-              <Sparkles className="ml-3 h-6 w-6" />
             </Button>
           </Link>
         </div>
